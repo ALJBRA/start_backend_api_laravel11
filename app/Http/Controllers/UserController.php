@@ -92,6 +92,9 @@ class UserController extends Controller
             $user = $this->userRepositoryInterface->update($users, $id);
 
             DB::commit();
+            if (!$user) {
+                return ApiResponseClass::sendResponse('User not found', '', 404);
+            }
             return ApiResponseClass::sendResponse('User Update Successful', '', 201);
         } catch (\Exception $ex) {
             return ApiResponseClass::rollback($ex);

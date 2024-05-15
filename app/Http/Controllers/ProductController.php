@@ -87,8 +87,10 @@ class ProductController extends Controller
         DB::beginTransaction();
         try {
             $product = $this->productRepositoryInterface->update($updateDetails, $id);
-
             DB::commit();
+            if (!$product) {
+                return ApiResponseClass::sendResponse('Product not found', '', 404);
+            }
             return ApiResponseClass::sendResponse('Product Update Successful', '', 201);
         } catch (\Exception $ex) {
             return ApiResponseClass::rollback($ex);
